@@ -1,0 +1,23 @@
+public void meeting(ConsumerRecord<String, String> record) {
+        String topic = record.topic();
+        String playload = record.value();
+        log.debug("kafka------------------------------playload="+playload);
+
+        if("meeting_appointment_success".equals(topic)||"meeting_appointment_cancel".equals(topic)||"meeting_appointment_delay".equals(topic)||"meeting_appointment_ending".equals(topic)){
+            //会议预约通知
+            if (playload.getBytes().length > 2048){
+                // 如果消息体大于2kb 则加入队列
+                try {
+                    MeetingAppointmentQueue.queue.put(playload);
+                } catch (InterruptedException interruptedException) {
+                    interruptedException.printStackTrace();
+                }
+            }else {
+                kafkaServiceImpl.success(playload);
+            }
+        }else if("meeting_approval_msg".equals(topic) || "meeting_approval_true".equals(topic) || "meeting_approval_false".equals(topic) ){
+            //会议审批通知
+            kafkaServiceImpl.approval(playload,topic);
+        }
+
+    }
