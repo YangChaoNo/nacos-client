@@ -1,0 +1,23 @@
+package com.example.demo.queue;
+
+import java.util.concurrent.ExecutorService;
+
+public class MeetingAppointmentSuccessNoticeConsumerAction {
+    private static ExecutorService instance = null;
+
+    public static ExecutorService getInstance() {
+        if (instance == null) {
+            instance = ExecutorTool.getInstance();
+        }
+        return instance;
+    }
+
+    /**
+     * 生成消费者 确保消费者 只实例化一次
+
+     */
+    public static void initConsumer(ExecutorService instance) {
+        cn.tico.person_contact.consumer.MeetingAppointmentSuccessNoticeConsumer mc = new cn.tico.person_contact.consumer.MeetingAppointmentSuccessNoticeConsumer(MeetingAppointmentQueue.queue);
+        instance.execute(mc);
+    }
+}
