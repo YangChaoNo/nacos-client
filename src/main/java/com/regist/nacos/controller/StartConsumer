@@ -1,0 +1,6 @@
+    public static void main(String[] args) {
+        SpringApplication.run(PersonContactApplication.class, args);
+        // 初始化线程池 初始化会议消息消费者
+        ExecutorService instance = MeetingAppointmentSuccessNoticeConsumerAction.getInstance();
+        MeetingAppointmentSuccessNoticeConsumerAction.initConsumer(instance);
+    }
