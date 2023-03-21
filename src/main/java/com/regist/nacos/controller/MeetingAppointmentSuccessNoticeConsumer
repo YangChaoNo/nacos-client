@@ -1,0 +1,33 @@
+package com.example.demo.queue;
+
+import cn.tico.person_contact.service.impl.KafkaServiceImpl;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.concurrent.BlockingQueue;
+
+@Slf4j
+public class MeetingAppointmentSuccessNoticeConsumer implements Runnable{
+    @Autowired
+    KafkaServiceImpl kafkaServiceImpl;
+
+    private BlockingQueue<String> queue;
+
+    public MeetingAppointmentSuccessNoticeConsumer(BlockingQueue<String> queue) {
+        this.queue = queue;
+    }
+
+    @Override
+    public void run() {
+        while (true) {
+            try {
+                String data = this.queue.take();
+                log.debug(Thread.currentThread().getName() + "消费开始：" + data.toString());
+                kafkaServiceImpl.success(data);
+            } catch (Exception e) {
+                log.error("消息消费者内部异常了，信息为:" + e);
+                e.printStackTrace();
+            }
+        }
+    }
+}
