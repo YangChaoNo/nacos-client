@@ -1,0 +1,8 @@
+package com.example.demo.queue;
+
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+
+public class MeetingAppointmentQueue {
+    public static BlockingQueue<String> queue = new LinkedBlockingQueue<>();
+}
